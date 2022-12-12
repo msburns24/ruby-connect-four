@@ -9,7 +9,6 @@ class Neighbor
     @direction = direction
 
     setup_reverse(first_made) # Setup reverse relationship
-    
   end
 
   def setup_reverse(first_made)

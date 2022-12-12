@@ -9,7 +9,8 @@ describe Neighbor do
 
       before do 
         main_slot = Slot.new(0, 0)
-        second_slot = Slot.new()
+        second_slot = Slot.new(0, 1)
+        
       end
 
       it "adds to slot a neighbor slot" do

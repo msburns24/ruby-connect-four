@@ -8,4 +8,7 @@ class Slot
 
   def new_neighbor(slot, direction)
   end
+
+  def neighbor_with?(slot)
+  end
 end
