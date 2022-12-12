@@ -26,19 +26,76 @@ describe Board do
     
   end
 
-  describe '#create_neighbors' do
+  describe '#setup_neighbors' do
 
-    context 'when neighbor relationships are created' do
-
-      it 'should relate slot (0,0) to slot (0,1) in the same col' do
-        first_slot = test_board.slots[0][0]
-        second_slot = test_board.slots[0][1]
-        first_neighbors = first_slot.neighbors
-        expect(first_neighbors).to include?(second_slot)
-      end
-
+    before do 
+      test_board.create_slots
+      test_board.setup_neighbors
     end
 
+    context 'when vertical relationships are created' do
+
+      it "creates a relationship between (0,0) and (0,1)" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[0][1]
+        expect(slot1.neighbors).to include(slot2)
+      end
+
+      it "creates a relationship as vertical" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[0][1]
+        direction = slot1.neig_directions[slot2]
+        expect(direction).to eq("vertical")
+      end
+    end
+
+    context 'when horizontal relationships are created' do
+
+      it "creates a relationship between (0,0) and (1,0)" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[1][0]
+        expect(slot1.neighbors).to include(slot2)
+      end
+
+      it "creates a relationship as horizontal" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[1][0]
+        direction = slot1.neig_directions[slot2]
+        expect(direction).to eq("horizontal")
+      end
+    end
+
+    context 'when upslope relationships are created' do
+
+      it "creates a relationship between (0,0) and (1,1)" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[1][1]
+        expect(slot1.neighbors).to include(slot2)
+      end
+
+      it "creates a relationship as upslope" do 
+        slot1 = test_board.slots[0][0]
+        slot2 = test_board.slots[1][1]
+        direction = slot1.neig_directions[slot2]
+        expect(direction).to eq("upslope")
+      end
+    end
+
+    context 'when downslope relationships are created' do
+
+      it "creates a relationship between (0,1) and (0,1)" do 
+        slot1 = test_board.slots[0][1]
+        slot2 = test_board.slots[1][0]
+        expect(slot1.neighbors).to include(slot2)
+      end
+
+      it "creates a relationship as downslope" do 
+        slot1 = test_board.slots[0][1]
+        slot2 = test_board.slots[1][0]
+        direction = slot1.neig_directions[slot2]
+        expect(direction).to eq("downslope")
+      end
+    end
   end
 
 end

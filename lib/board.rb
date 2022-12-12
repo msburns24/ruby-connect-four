@@ -1,8 +1,7 @@
 require_relative 'slot'
-require_relative 'neighbor'
 
 class Board
-  attr_reader :slots
+  attr_reader :slots, :neighbor_hash
   
   def initialize
     @slots = []
@@ -20,12 +19,12 @@ class Board
     end
   end
 
-  def create_neighbors
-    (0..6).each do |col|
-      (0..5).each do |row|
-        slot = @slots[col][row]
-        slot.neighbors << Neighbor.new(slot, @slots[col][row+1]) unless row==5
-      end
-    end
+  def setup_neighbors
+    (0..6).each { |col| (0..5).each { |row| 
+      @slots[col][row].new_neighbor(@slots[col][row+1], "vertical") unless row == 5
+      @slots[col][row].new_neighbor(@slots[col+1][row], "horizontal") unless col == 6
+      @slots[col][row].new_neighbor(@slots[col+1][row+1], "upslope") unless (col == 6 || row == 5)
+      @slots[col][row].new_neighbor(@slots[col+1][row-1], "downslope") unless (col == 6 || row == 0)
+    } }
   end
 end
