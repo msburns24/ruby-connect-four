@@ -1,4 +1,1 @@
-variable = nil
-variable = "Hi world"
-
-puts variable
+require_relative 'board'

@@ -2,7 +2,8 @@ require_relative 'slot'
 require_relative 'connection_searcher'
 
 class Board
-  attr_reader :slots, :neighbor_hash
+  attr_reader :slots
+  attr_accessor :connection_searcher
   
   def initialize
     @slots = []
@@ -35,5 +36,9 @@ class Board
       slot_i.color = color
       break
     end
+  end
+
+  def add_searcher
+    @connection_searcher = ConnectionSearcher.new(@slots)
   end
 end
