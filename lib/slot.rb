@@ -1,8 +1,10 @@
 class Slot
   attr_reader :col, :row, :neighbors, :neig_directions
+  attr_accessor :color
   def initialize(col, row)
     @col = col
     @row = row
+    @color = nil
     @neighbors = []
     @neig_directions = {}
     @connections = []

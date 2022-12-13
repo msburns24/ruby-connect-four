@@ -98,22 +98,68 @@ describe Board do
     end
   end
 
-  # describe "#create_connection" do
+  describe "#add_piece" do
 
-  #   before do 
-  #     test_board.create_slots
-  #     test_board.setup_neighbors
-  #   end
+    before do
+      test_board.create_slots
+      test_board.setup_neighbors
+    end
 
-  #   context "when new connection is created" do
+    context "When black piece is added to col 0" do
+      before do
+        test_board.add_piece("black", 0)
+      end
 
-  #     it "adds slot to connections list" do
-  #       test_board.create_connection
-  #       slot1 = test_board[0][0]
-  #       slot2 = test_board[0][1]
-  #       test_board.create
-  #     end
-  #   end
-  # end
+      it "changes color of slot (0,0) to black" do
+        first_slot = test_board.slots[0][0]
+        expect(first_slot.color).to eq("black")
+      end
+
+      it "doesn't change other colors in column" do
+        other_colors = []
+        test_board.slots[0][1..].each {|slot| other_colors << slot.color }
+        expect(other_colors).to all(be_nil)
+      end
+      
+    end
+
+    context "when two black pieces are added to col 0" do
+      before do
+        2.times { test_board.add_piece("black", 0) }
+      end
+
+      it "makes color of slot (0,1) black" do
+        slot2 = test_board.slots[0][1]
+        expect(slot2.color).to eq("black")
+      end
+
+      it "doesn't change colors of slots [0][2..5]" do
+        empty_slots = test_board.slots[0][2..]
+        empty_slot_colors = []
+        empty_slots.each { |slot| empty_slot_colors << slot.color }
+        expect(empty_slot_colors).to all(be_nil)
+      end
+
+    end
+
+    context "when black piece then red piece added to col 1" do
+      before do
+        test_board.add_piece("black", 1)
+        test_board.add_piece("red", 1)
+      end
+
+      it "turns slot (1,0) to black" do
+        slot1 = test_board.slots[1][0]
+        expect(slot1.color).to eq("black")
+      end
+
+      it "turns slot (1,1) to red" do
+        slot2 = test_board.slots[1][1]
+        expect(slot2.color).to eq("red")
+      end
+
+    end
+
+  end
 
 end

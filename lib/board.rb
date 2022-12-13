@@ -1,4 +1,5 @@
 require_relative 'slot'
+require_relative 'connection_searcher'
 
 class Board
   attr_reader :slots, :neighbor_hash
@@ -26,5 +27,13 @@ class Board
       @slots[col][row].new_neighbor(@slots[col+1][row+1], "upslope") unless (col == 6 || row == 5)
       @slots[col][row].new_neighbor(@slots[col+1][row-1], "downslope") unless (col == 6 || row == 0)
     } }
+  end
+
+  def add_piece(color, column)
+    @slots[column].each do |slot_i|
+      next unless slot_i.color.nil?
+      slot_i.color = color
+      break
+    end
   end
 end
