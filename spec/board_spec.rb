@@ -98,4 +98,22 @@ describe Board do
     end
   end
 
+  # describe "#create_connection" do
+
+  #   before do 
+  #     test_board.create_slots
+  #     test_board.setup_neighbors
+  #   end
+
+  #   context "when new connection is created" do
+
+  #     it "adds slot to connections list" do
+  #       test_board.create_connection
+  #       slot1 = test_board[0][0]
+  #       slot2 = test_board[0][1]
+  #       test_board.create
+  #     end
+  #   end
+  # end
+
 end
