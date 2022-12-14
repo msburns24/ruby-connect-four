@@ -6,11 +6,14 @@ class Board
   attr_accessor :slots
   attr_accessor :connection_searcher
   
-  def initialize
-    @slots = []
+  def initialize()
+    create_slots
+    setup_neighbors
+    add_searcher
   end
 
   def create_slots
+    @slots = []
     # For each column (7)
     (0..6).each do |col|
       @slots << []
@@ -31,15 +34,32 @@ class Board
     } }
   end
 
+  def add_searcher
+    @connection_searcher = ConnectionSearcher.new(@slots)
+  end
+  
   def add_piece(color, column)
     @slots[column].each do |slot_i|
       next unless slot_i.color.nil?
       slot_i.color = color
-      break
+      return 1
     end
+    return nil
   end
 
-  def add_searcher
-    @connection_searcher = ConnectionSearcher.new(@slots)
+  def slots_from_json(filename)
+    slots_array = []
+
+    json_object = File.read(filename)
+    slot_data_array = JSON.parse(json_object)
+    slot_data_array.each do |col|
+      slots_array << []
+      col.each do |slot_data|
+        slots_array[-1] << Slot.from_json(slot_data)
+      end
+    end
+
+    @slots = slots_array
+    setup_neighbors
   end
 end
