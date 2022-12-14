@@ -1,5 +1,6 @@
 require_relative '../lib/connection_searcher'
 require_relative '../lib/board'
+require 'json'
 
 describe ConnectionSearcher do
 
@@ -11,14 +12,27 @@ describe ConnectionSearcher do
     @searcher = @test_board.connection_searcher
   end
 
-  describe "search" do
+  describe "#search" do
 
     
 
     context "When no solution exists" do
 
       it "returns nil" do
-        base_slot = @searcher.slots[0][0]
+        slot_data_array = JSON.parse(File.read('data/test_board_no_win.json'))
+
+        slots_array = []
+        slot_data_array.each do |col|
+          slots_array << []
+          col.each do |data_hash|
+            slots_array[-1] << Slot.from_json(data_hash)
+          end
+        end
+
+        @test_board.slots = slots_array
+        @test_board.setup_neighbors
+
+        base_slot = @test_board.slots[0][0]
         search_results = @searcher.search(base_slot)
         expect(search_results).to be_nil
       end

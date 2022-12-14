@@ -31,13 +31,11 @@ class ConnectionSearcher
 
   def find_conn_length(root, first_neighbor, direction, length = 2)
     # Consider all neighbors of "first_neighbor"
-    puts "Searching current neighbor, length = #{length}"
     neighbors = first_neighbor.neighbors
     neighbors -= [root]
     direction_hash = first_neighbor.neig_directions
     neighbors.each do |neighbor_i|
       if direction_hash[neighbor_i] == direction && neighbor_i.color == first_neighbor.color
-        puts "Go to next neighbor, length = #{length + 1}"
         length = find_conn_length(first_neighbor, neighbor_i, direction, length + 1)
       end
     end
