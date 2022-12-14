@@ -2,7 +2,8 @@ require_relative 'slot'
 require_relative 'connection_searcher'
 
 class Board
-  attr_reader :slots
+  # attr_reader :slots
+  attr_accessor :slots
   attr_accessor :connection_searcher
   
   def initialize

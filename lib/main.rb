@@ -1,61 +1,36 @@
 require_relative 'board'
-require 'colorize'
-require 'colorized_string'
 
-# puts ColorizedString.colors
-
-# puts "Test grey color".colorize(:light_black)
-
-########
-#### This one has blanks instead of grey O's, looks better for acutal game.
-# 
-# def print_row(color_array)
-#   color_array.each do |color|
-#     print " |".colorize(:light_black)
-#     if color == :light_black
-#       print "  "
-#     else 
-#       print " O".colorize(color)
-#     end
-#   end
-#   print " | \n".colorize(:light_black)
-# end
-
-def print_row(color_array)
-  color_array.each do |color|
-    print " |".colorize(:light_black)
-    print " O".colorize(color)
-  end
-  print " | \n".colorize(:light_black)
-end
+# Create board instance, create slots / neighbors
+my_board = Board.new()
+my_board.create_slots
+my_board.setup_neighbors
 
 total_array = [
-  [:light_black, :light_black, :light_black, :light_black, :light_black, :light_black, :light_black,],
-  [:red, :light_black, :light_black, :light_black, :light_black, :light_black, :light_black,],
-  [:yellow, :light_black, :red, :light_black, :red, :light_black, :red],
-  [:yellow, :yellow, :red, :yellow, :red, :yellow, :yellow],
-  [:yellow, :red, :red, :red, :yellow, :yellow, :yellow],
-  [:red, :red, :red, :yellow, :yellow, :yellow, :red]
+  [nil, nil, nil, nil, nil, nil, nil],
+  ["red", nil, nil, nil, nil, nil, nil],
+  ["yellow", nil, "red", nil, "red", nil, "red"],
+  ["yellow", "yellow", "red", "yellow", "red", "yellow", "yellow"],
+  ["yellow", "red", "red", "red", "yellow", "yellow", "yellow"],
+  ["red", "red", "red", "yellow", "yellow", "yellow", "red"]
 ]
 
-puts ""
-total_array.each do |row|
-  print_row(row)
+5.downto(0) do |row|
+  (0..6).each do |col|
+    color = total_array[row][col]
+    next if color.nil?
+    my_board.add_piece(color, col)
+  end
 end
 
-puts " ----------------------------- "
-puts " |                           | "
-puts "_|_                         _|_"
-puts ""
+require 'json'
 
+pieces_array = []
+my_board.slots.each do |column|
+  pieces_array << []
+  column.each do |slot|
+    pieces_array[-1] << slot.to_json
+  end
+end
 
-
-# | O | O | O | O | O | O | O |
-# | O | O | O | O | O | O | O |
-# | O | O | O | O | O | O | O |
-# | O | O | O | O | O | O | O |
-# | O | O | O | O | O | O | O |
-# | O | O | O | O | O | O | O |
-# -----------------------------
-# |                           |
-#_|_                         _|_
+filename = "data/test_board_no_win.json"
+File.write(filename, JSON.dump(pieces_array))
