@@ -6,23 +6,41 @@ class ConnectionSearcher
     @slots = slots
   end
 
-  def search(slot, color = nil, direction = nil, stack = [], visited = [], depth = 0)
-    # Add neighbors
-    slot.neighbors.each { |slot_i| stack << slot_i }
-    visited << slot 
-    
-    # If slot is colored, check neghbors for same color
-    if slot.color
-      next_slot = stack.pop
-      next_direction = slot.neig_directions[next_slot]
-      search(
-        next_slot,
-        slot.color,
-        next_direction,
-        stack,
-        visited,
-        (depth + 1)
-      )
+  def search(slot, stack = [], visited = [])
+    # Add slot's neighbors to stack
+    visited << slot
+
+    slot.neighbors.each do |neighbor_i|
+      next if visited.include?(neighbor_i)
+      stack << neighbor_i unless stack.include?(neighbor_i)
+
+      if neighbor_i.color && (neighbor_i.color == slot.color)
+        direction_i = slot.neig_directions[neighbor_i]
+        max_length = find_conn_length(slot, neighbor_i, direction_i)
+        return neighbor_i.color if max_length >= 4
+      end
     end
+
+    # While stack isn't empty:
+    until stack.empty?
+      next_slot = stack.pop
+      search(next_slot, stack, visited)
+    end
+    return nil
+  end
+
+  def find_conn_length(root, first_neighbor, direction, length = 2)
+    # Consider all neighbors of "first_neighbor"
+    puts "Searching current neighbor, length = #{length}"
+    neighbors = first_neighbor.neighbors
+    neighbors -= [root]
+    direction_hash = first_neighbor.neig_directions
+    neighbors.each do |neighbor_i|
+      if direction_hash[neighbor_i] == direction && neighbor_i.color == first_neighbor.color
+        puts "Go to next neighbor, length = #{length + 1}"
+        length = find_conn_length(first_neighbor, neighbor_i, direction, length + 1)
+      end
+    end
+    return length
   end
 end
