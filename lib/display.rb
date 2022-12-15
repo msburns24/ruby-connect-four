@@ -11,6 +11,15 @@ class Display
     @errors = []
   end
 
+  def print_welcome
+    system 'cls'
+    msg = JSON.parse(File.read("data/opening_message.json"))
+    msg.each { |line| puts line }
+
+    puts "\n\nPress any key to continue..."
+    gets
+  end
+
   def print_board
     system 'cls'
     color_array = get_board_colors
@@ -89,17 +98,3 @@ class Display
     end
   end
 end
-
-
-#######################
-## Temp (Delete Later)
-
-require_relative '../lib/board'
-test_board = Board.new()
-test_board.slots_from_json("data/test_board_no_win.json")
-
-test_display = Display.new(test_board)
-test_display.print_board
-
-## End Temp
-######################

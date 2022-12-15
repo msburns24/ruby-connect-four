@@ -62,4 +62,12 @@ class Board
     @slots = slots_array
     setup_neighbors
   end
+
+  def winner?
+    @connection_searcher.search
+  end
+
+  def tie?
+    @slots.each { |col| col.each { |slot| return false unless slot.color } }
+  end
 end

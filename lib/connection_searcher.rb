@@ -6,13 +6,12 @@ class ConnectionSearcher
     @slots = slots
   end
 
-  def search(slot, stack = [], visited = [])
+  def search(slot = @slots[0][0], stack = [], visited = [])
     # Add slot's neighbors to stack
     visited << slot
 
     slot.neighbors.each do |neighbor_i|
-      next if visited.include?(neighbor_i)
-      stack << neighbor_i unless stack.include?(neighbor_i)
+      stack << neighbor_i unless stack.include?(neighbor_i) || visited.include?(neighbor_i)
 
       if neighbor_i.color && (neighbor_i.color == slot.color)
         direction_i = slot.neig_directions[neighbor_i]
@@ -24,9 +23,8 @@ class ConnectionSearcher
     # While stack isn't empty:
     until stack.empty?
       next_slot = stack.pop
-      search(next_slot, stack, visited)
+      return search(next_slot, stack, visited)
     end
-    return nil
   end
 
   def find_conn_length(root, first_neighbor, direction, length = 2)
